@@ -1,1 +1,14 @@
 include: package:solid_lints/analysis_options.yaml
+
+analyzer:
+  plugins:
+    - custom_lint
+
+
+custom_lint:
+  rules:
+    - avoid_non_null_assertion
+    - avoid_global_state
+    - avoid_unnecessary_setstate
+    - double_literal_format
+    - avoid_unnecessary_type_assertions
