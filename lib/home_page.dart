@@ -10,8 +10,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
-{
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   Color _backgroundColor = Colors.white;
   Color _textColor = Colors.black;
   Color _rippleColor = Colors.red;
@@ -23,37 +23,33 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   late AnimationController _controller;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
-    )..addListener((){
-      setState(() {
-        for (int i =0; i<_rippleRadius.length; i++){
-          // ignore: no_magic_number
-          _rippleRadius[i] = _controller.value *100;
-          _rippleOpacity[i] = 1-_controller.value;
-        }
+    )..addListener(() {
+        setState(() {
+          for (int i = 0; i < _rippleRadius.length; i++) {
+            // ignore: no_magic_number
+            _rippleRadius[i] = _controller.value * 100;
+            _rippleOpacity[i] = 1 - _controller.value;
+          }
+        });
       });
-    });
   }
 
-
-
-  int _lcgAlgorithm(){
+  int _lcgAlgorithm() {
     //constants
     const int a = 1664525;
     const int c = 1013904223;
     const int m = 4294967296;
 
-    return  _seed= (a*_seed +c) %m;
-
-
+    return _seed = (a * _seed + c) % m;
   }
 
   //Function to generate a random color
-  Color _generateRandomColor(){
+  Color _generateRandomColor() {
     const int rgb = 256;
 
     return Color.fromRGBO(
@@ -65,9 +61,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   //Function to change both background and text color on tap
-  void _changeColors(TapDownDetails details){
+  void _changeColors(TapDownDetails details) {
     setState(() {
-      _backgroundColor= _generateRandomColor();
+      _backgroundColor = _generateRandomColor();
       _textColor = _generateRandomColor();
       _rippleColor = _generateRandomColor();
       // Clear all previous ripple data
@@ -87,35 +83,42 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTapDown:_changeColors,
+        onTapDown: _changeColors,
         child: Stack(
-          children:[ AnimatedContainer(
-            duration: const Duration(seconds:1),
-            color: _backgroundColor,
-            child: Center(
-              child: AnimatedDefaultTextStyle(
-                style: TextStyle(
-                  fontSize: 40,
-                  color: _textColor,
-                  fontWeight: FontWeight.bold,
-                ), duration: const Duration(seconds: 1),
-                child: const Text('Hello There'),
+          children: [
+            AnimatedContainer(
+              duration: const Duration(seconds: 1),
+              color: _backgroundColor,
+              child: Center(
+                child: AnimatedDefaultTextStyle(
+                  style: TextStyle(
+                    fontSize: 40,
+                    color: _textColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  duration: const Duration(seconds: 1),
+                  child: const Text('Hello There'),
+                ),
               ),
             ),
-          ),
             CustomPaint(
               painter: RipplePainter(
-                _tapPoints, _rippleRadius, _rippleOpacity, _rippleColor,),
+                _tapPoints,
+                _rippleRadius,
+                _rippleOpacity,
+                _rippleColor,
+              ),
               child: Container(),
-            ),],
+            ),
+          ],
         ),
       ),
     );
   }
+
   @override
-  void dispose(){
+  void dispose() {
     _controller.dispose();
     super.dispose();
   }
-
 }
